@@ -4,16 +4,16 @@
     <div class="student-records">
       <van-tabs v-model="recordsTab" swipeable title-inactive-color='#999999' title-active-color='#333333' color='#333333' lazy-render>
         <van-tab title="参与人员">
-          <ParticipantRecord ref="CounselRecordRef" :counselTab="counselTab" :sId="sId" :isAutoScroll.sync="isAutoScroll" />
+          <ParticipantRecord ref="participantRecord" :counselTab="counselTab" :sId="sId" :isAutoScroll.sync="isAutoScroll" />
         </van-tab>
         <van-tab title="移交情况">
-          <HandoverRecord ref="ActiveRecordRef" :sId="sId" :isAutoScroll.sync="isAutoScroll" />
+          <HandoverRecord  :sId="sId" :isAutoScroll.sync="isAutoScroll" />
         </van-tab>
         <van-tab title="问卷信息">
-          <QuestionRecord ref="BookOrderRef" :counselTab="counselTab" :sId="sId" :isAutoScroll.sync="isAutoScroll" />
+          <QuestionRecord  :counselTab="counselTab" :sId="sId" :isAutoScroll.sync="isAutoScroll" />
         </van-tab>
         <van-tab title="成本管理">
-          <CostRecord ref="BookOrderRef" :sId="sId" :counselTab="counselTab" :branchId="studentInfo.branchId" :isAutoScroll.sync="isAutoScroll" />
+          <CostRecord  :sId="sId" :counselTab="counselTab" :branchId="studentInfo.branchId" :isAutoScroll.sync="isAutoScroll" />
         </van-tab>
       </van-tabs>
     </div>
@@ -21,7 +21,7 @@
 </template>
 <script>
 import { getLectureInfoApi } from '@/api/potentialGuest/activity'
-
+import { mapState, mapMutations } from 'vuex'
 export default {
   props: {
     listType: String
@@ -33,6 +33,11 @@ export default {
     QuestionRecord: () => import('./components/QuestionRecord'), // 问卷信息
     CostRecord: () => import('./components/CostRecord'), // 成本管理
     LectureDetailsCard: () => import('@/components/LectureDetailsCard')
+  },
+  computed: {
+    ...mapState({
+      activityPartId: state => state.activity.activityPartId
+    }),
   },
   data() {
     return {
@@ -50,15 +55,23 @@ export default {
     this.handleScrollInit()
   },
   activated() {
-    this.handleScrollInit()
+    // this.handleScrollInit()
     if (this.isReFresh) {
       this.handleDetail()
     }
-    console.log('777');
     // 重置问卷预览缓存
     this.$EventBus.$emit('handleResetLive', 'activities-QuesConnect')
+
+    // 参与人员是否跟新
+    if (activityPartId) {
+      this.$nextTick(() => {
+        this.$refs.participantRecord.reSetSingleList(this.activityPartId)
+        this['SET_PARTACTID']({ activityPartId: null })
+      })
+    }
   },
   methods: {
+    ...mapMutations('activity', ['SET_PARTACTID']),
     handleRefresh() {
       this.isReFresh = true
     },

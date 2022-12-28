@@ -173,6 +173,8 @@ export default {
     quesConnectObjIsUpdate: false, // 关联问卷成功活动是否刷新
     activityIsAddUpdate: false, // 添加活动列表是否刷新
     isDetailsEnter: false, // 是否是详情进入编辑
+    activityPartId: null, // 参与人员id
+    activityPartIsUpdate: false, // 参与人员列表是否
   },
   mutations: {
     SET_QUERYLIST(state, queryList) {
@@ -243,6 +245,13 @@ export default {
     SET_DETAILFLAG(state, payload) {
       const { flag } = payload
       state.isDetailsEnter = flag
+    },
+
+    // 设置参与人员id
+    SET_PARTACTID(state, payload) {
+      const { activityPartId } = payload
+      console.log('activityPartId...', activityPartId);
+      state.activityPartId = activityPartId
     }
   },
   actions: {

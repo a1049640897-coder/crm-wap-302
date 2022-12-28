@@ -34,6 +34,7 @@
 </template>
 <script>
 import { postPartStudentListApi, postPartStudentCountApi, postPartStudentConditonApi } from '@/api/potentialGuest/activity'
+
 // 参与人员
 export default {
   props: {
@@ -69,6 +70,7 @@ export default {
       firstList: []
     }
   },
+
   created() {
     let sId = Number(this.$route.params.sid)
     if (!Number.isNaN(sId)) { this.sId = sId }
@@ -77,7 +79,18 @@ export default {
     this.listQuery.param.type = this.listType
     this.handleInit('firstRequest')
   },
+
   methods: {
+    reSetSingleList(id) {
+      let listQuery = JSON.parse(JSON.stringify(this.listQuery))
+      listQuery.id = id
+      postPartStudentListApi(listQuery).then(res => {
+        console.log('resss...', res.data);
+      })
+    },
+    handleUpdataInfo() {
+      this.$emit('onUpdataInfo')
+    },
     checkPermissionStatus(counselTab) {
       if (counselTab == 'LectureReg') {
         return 'MARKET:SCHOOL:PARTICIPANT_ENTER'
