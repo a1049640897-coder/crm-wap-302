@@ -17,7 +17,7 @@
     </div>
     <RMList v-if="tableList.length" :moreLoading.sync="moreLoading" :refreshing.sync="refreshing" :finished.sync="finished" @onLoad="handleLoad" @onRefresh="handleRefresh" isMore :tableList="tableList">
       <div>
-        <StudentCard v-for="(item, index) in tableList" :key="item.id" :sId="item.id" :studentData="item" @onUpdataInfo="handleUpdataInfo($event, item, index)" :listType="'9'" />
+        <StudentCard :isFreshs="listConditonObj.isFreshs" v-for="(item, index) in tableList" :key="item.id" :sId="item.id" :studentData="item" @onUpdataInfo="handleUpdataInfo($event, item, index)" :listType="'9'" />
       </div>
     </RMList>
     <div class="common-empty" v-else style="background: #ffffff;">
@@ -54,7 +54,14 @@ export default {
       listConditonObj: {},
       listQuery: {
         pageinfo: { pageNum: 1, pageSize: 20, sort: [{ column: 'addTime', type: 1 }] },
-        param: { type: 3, countFilter: 1, sysShellId: [], activityId: [], startDate: null, endDate: null, keyword: null, consultantName: [], intentionType: [], intentionClass: [], sex: [], courseAttribute: [], owner: null, schoolManager: [], followState: [], ids: [], isFresh: null, attendSchools: [], consultState: null, cityId: null }
+        param: {
+          type: 3, countFilter: 1, sysShellId: [], activityId: [],
+          startDate: null, endDate: null, keyword: null, consultantName: [],
+          intentionType: [], intentionClass: [], sex: [], courseAttribute: [],
+          owner: [], schoolManager: [], followState: [], ids: [],
+          crmMarketAreaIds: [],
+          isFresh: null, attendSchools: [], consultState: null, cityId: null
+        }
       },
       sId: null,
       countObj: { 1: 0, 6: 0, 7: 0 },
@@ -103,32 +110,30 @@ export default {
       this.getTableList('init', val)
     },
     handleListQuery(paramProp) {
-      this.listQuery.pageinfo.sort = paramProp.sortRule ? [{ ...paramProp.sortRule }] : []
-      this.listQuery.param = {
-        ...this.listQuery.param,
-        ...paramProp,
-        type: this.listType == 1 ? 1 : 3,
-        // intentionType: paramProp.intentionType ? [paramProp.intentionType] : [], // 意向类型
-        result: paramProp.result ? paramProp.result == 5 ? [] : [paramProp.result] : [], // 咨询结果
-        followUpState: paramProp.followUpState == 5 ? null : paramProp.followUpState, // 跟进状态
-        consultState: paramProp.consultState == 5 ? null : paramProp.consultState, // 预约状态
-        intentionClass: paramProp.intentionClass ? [...paramProp.intentionClass] : [], // 意向班型
-        cityId: paramProp.cityId, // 所在城市
-        examYear: paramProp.examYear ? [...paramProp.examYear] : [], // 市场区域
-        isFresh: paramProp.isFreshLocal, // 属性
-        schoolManager: paramProp.campusLocal ? [...paramProp.campusLocal] : [], // 市场区域负责人
-        owner: paramProp.ownLocal ? [...paramProp.ownLocal] : [], // 所属人
-        crmMarketAreaIds: paramProp.areaId ? [...paramProp.areaId] : [], // 市场区域
-        years: paramProp.graduationYearLocal ? [paramProp.graduationYearLocal] : [], // 毕业年份
-        examYears: paramProp.examYears ? [...paramProp.examYears] : [], // 考试年份
-        
-      }
+      this.listQuery.pageinfo.sort = paramProp.sortRule ? [{ ...paramProp.sortRule }] : [],
+        this.listQuery.param = {
+          ...this.listQuery.param,
+          ...paramProp,
+          type: this.listType == 1 ? 1 : 3, //  listType: 1 讲座登记 其他: 营销活动
+          attendSchools: paramProp.schoolIdLocal ? [paramProp.schoolIdLocal] : [], // 就读学校
+          years: paramProp.graduationYearLocal ? [paramProp.graduationYearLocal] : [], // 毕业年份
+          examYears: paramProp.examYearLocal ? [paramProp.examYearLocal] : [], // 考试年份
+          schoolManager: paramProp.campusLocal ? [paramProp.campusLocal] : [], // 市场区域负责人
+          owner: paramProp.ownLocal ? [paramProp.ownLocal] : [], // 所属人
+
+          // intentionType: paramProp.intentionType ? [paramProp.intentionType] : [], // 意向类型
+          result: (paramProp.result && paramProp.result !== 5) ? [paramProp.result] : [], // 咨询结果
+          followUpState: paramProp.followUpState == 5 ? null : paramProp.followUpState, // 跟进状态
+          consultState: paramProp.consultState == 5 ? null : paramProp.consultState, // 预约状态
+
+        }
       this.finished = false
       this.handleRefresh()
     },
     getListConditon() {
       this.listQuery.param.activityId = [this.sId]
       postPartStudentConditonApi(this.listQuery.param).then(res => {
+        console.log('res', res.data);
         this.listConditonObj = res.data || { attendSchools: [], consultResults: [], consultants: [], intentionClasss: [], intentions: [], isFreshs: [], owners: [], schoolManagers: [] }
         this.listConditonObj.consultResults = (this.listConditonObj.consultResults || []).map(v => {
           return {
@@ -139,6 +144,12 @@ export default {
         this.listConditonObj.consultResults.unshift({
           id: 5,
           text: '全部'
+        })
+        this.listConditonObj.isFreshs = this.listConditonObj.isFreshs.map(v => {
+          return {
+            text: v.text,
+            value: (v.value || v.value == 0) && v.value.toString()
+          }
         })
       })
     },
@@ -156,13 +167,6 @@ export default {
           ...this.listQuery.param,
           sysShellId: shellIdsLocal ? [shellIdsLocal] : [], // 部门
           activityId: [this.sId],
-          /* schoolId: schoolIdLocal ? [schoolIdLocal] : [], // 就读学校
-          consultType: consultTypeLocal ? [consultTypeLocal] : [], // 咨询类型
-          examYear: examYearLocal ? [examYearLocal] : [], // 考试年份
-          isFresh: isFreshLocal ? [isFreshLocal] : [], // 属性
-          campus: campusLocal ? [campusLocal] : [], // 市场区域负责人
-          own: ownLocal ? [ownLocal] : [], // 所属人
-          graduationYear: graduationYearLocal ? [graduationYearLocal] : [] // 毕业年份 */
         }
       }
       postPartStudentListApi(query).then(res => {

@@ -3,7 +3,8 @@
     <div class="student-base">
       <div class="student-header">
         <div class="SH-l">
-          <span class="SH-name">{{studentData.title}}</span>
+          <span class="SH-name" v-if="listType ==3 ">{{studentData.abbreviation}} {{studentData.title}}</span>
+          <span class="SH-name" v-else> {{studentData.title}}</span>
           <span class="SH-tag" :class="studentData.state == 1 ? 'SH-tag-green':  studentData.state == 2 ? 'SH-tag-blue' : 'SH-tag-gray'" v-if="studentData.state">{{studentData.state == 1 ? '未开始' :studentData.state == 2 ? '进行中' : '已结束' }}</span>
           <span class="SH-tag SH-tag-blue" v-else-if="studentData.opponent">{{studentData.opponent}}</span>
         </div>
@@ -23,11 +24,11 @@
       <div class="student-subtitle" :class="studentData.state == 1 ? 'subtitle-green':  studentData.state == 2 ? 'subtitle-blue' : 'subtitle-gray'">
         <span>{{studentData.dateStr}}</span><span v-if="listType != 2">{{studentData.method == 2 ? '面授' : '网授'}}</span><span v-if="listType != 2">{{studentData.teachers}}主讲</span>
       </div>
-
       <div class="student-extraInfo">
         <span class="extra-info-item" v-if="listType == 3 && studentData.attendance">到场{{studentData.attendance}}人<div class="extra-info-item-line"></div> </span>
-        <span class="extra-info-item" v-if="listType != 3 && studentData.chargePersonName">{{studentData.chargePersonName}} 负责<div class="extra-info-item-line"></div> </span>
+        <span class="extra-info-item" v-if="listType != 3 && (studentData.chargePersonName || studentData.chargePerson)">{{studentData.chargePersonName || studentData.chargePerson}}负责<div class="extra-info-item-line"></div> </span>
         <span class="extra-info-item" v-if="studentData.commonSchoolInfo">{{studentData.commonSchoolInfo[2]}} <div class="extra-info-item-line"></div> </span>
+        <span class="extra-info-item" v-if="studentData.sendBookType">{{studentData.sendBookType}} <div class="extra-info-item-line"></div> </span>
         <span class="extra-info-item" v-if="studentData.type">{{studentData.type}}<div class="extra-info-item-line"></div> </span>
         <span class="extra-info-item" v-if="studentData.targets">{{studentData.targets}}<div class="extra-info-item-line"></div> </span>
       </div>

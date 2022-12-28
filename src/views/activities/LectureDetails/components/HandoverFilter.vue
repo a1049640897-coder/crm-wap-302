@@ -413,7 +413,7 @@ export default {
     },
 
     handleDateSelect(val) {
-      if (val.filter(item => item).length) {
+     if (val.filter(item => item).length === 2) {
         // dateType 1: 移交日期 2 报名日期
         if (this.listQuery.dateType == 1) {
           this.listQuery.beginDate = dayjs(val[0]).format('YYYY/MM/DD')

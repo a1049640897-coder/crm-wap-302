@@ -17,9 +17,9 @@ export default {
       path: '/ActiveAddEdit/:id/:type/:counselTab', name: `${pre}ActiveAddEdit`, component: () => import('@/views/activities/ActiveAddEdit'), meta: { meta, cache: false, title: '添加讲座', isCloseWorkOrder: true }, beforeEnter: (to, from, next) => {
         const { type, id } = to.params
         if (id !== 'null') {
-          to.meta.title = type == 3 ? '编辑活动' : '编辑讲座'
+          to.meta.title = type == 3 ? '编辑营销活动' : type == 1 ? '编辑讲座登记' : '编辑对手讲座'
         } else {
-          to.meta.title = type == 3 ? '添加活动' : '添加讲座'
+          to.meta.title = type == 3 ? '添加营销活动' : type == 1 ? '添加讲座登记' : '添加对手讲座'
         }
         next()
       },

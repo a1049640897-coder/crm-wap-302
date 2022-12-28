@@ -58,7 +58,6 @@ export default {
   computed: {
     isShow() {
       let isShow = true
-      console.log(this.$route);
       if (this.$route.meta.isCloseWorkOrder) isShow = false
       return isShow
     }

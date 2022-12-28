@@ -21,6 +21,7 @@
           </van-radio-group>
         </template>
       </van-field>
+      <van-field v-model="submitForm.rivalTeacher" :label="'讲师姓名'" v-if="[2].includes(activityType)" required clear-trigger="always" maxlength="50" clearable input-align="right" placeholder="请输入" :rules="[{ required: true, message: '请输入' }]" />
       <RePick v-model="submitForm.materialId" label="资料清单" name="materialId" v-if="[3].includes(activityType)" :list="dataList" isShowSearch isCell multiple clearable />
       <RePick v-model="submitForm.courseIds" label="课程清单" name="courseIds" v-if="[3].includes(activityType)" :list="courseList" isShowSearch isCell multiple clearable />
       <van-field :label=" this.activityType == 1 ? '讲师类型' :'授课类型'" name="teacherType" required input-align="right" label-width="9em" v-if="[1].includes(activityType)">
@@ -31,7 +32,7 @@
           </van-radio-group>
         </template>
       </van-field>
-      <RePick v-model="submitForm.lecturer" label="讲师姓名" isRequrie :list.sync="teacherInsideNameList" isShowSearch multiple name="lecturer" isCell clearable v-if="[1].includes(activityType) && submitForm.teacherType == 1" isUseLimitPage/>
+      <RePick v-model="submitForm.lecturer" label="讲师姓名" isRequrie :list.sync="teacherInsideNameList" isShowSearch multiple name="lecturer" isCell clearable v-if="[1].includes(activityType) && submitForm.teacherType == 1" isUseLimitPage />
       <RePick v-model="submitForm.lecturer" label="讲师姓名" isRequrie :list.sync="teacherOutNameList" isShowSearch multiple name="lecturer" isCell clearable v-if="[1].includes(activityType) && submitForm.teacherType == 2" />
       <div class="add-lecturer" v-if="[1].includes(activityType) && submitForm.teacherType == 2">没有匹配到讲师? <span @click.stop="handleAddLecture">去添加讲师</span> </div>
       <van-field v-model="submitForm.studyUrl" label="上课链接" clear-trigger="always" clearable input-align="right" maxlength="100" placeholder="http://" v-if="[1,3].includes(activityType)" />
@@ -737,7 +738,7 @@ export default {
         }
 
         // 判断到场人数是否是正整数
-
+       
         //  添加
         if (this.activityId == 'null') {
           if ([1, 3].includes(this.activityType)) {
@@ -769,11 +770,15 @@ export default {
               }).catch(() => {
                 this.$loading(false, 'activityLoading')
               })
+            }).catch(() => {
+              this.$loading(false, 'activityLoading')
             })
           } else {
             addApi(competeLectData).then(() => {
               Notify({ type: 'success', message: '添加成功!' });
               this.handleBack(-1, 0)
+            }).catch(() => {
+              this.$loading(false, 'activityLoading')
             })
           }
         } else {
@@ -799,6 +804,8 @@ export default {
               }).catch(() => {
                 this.$loading(false, 'activityLoading')
               })
+            }).catch(() => {
+              this.$loading(false, 'activityLoading')
             })
           } else {
             //编辑
@@ -807,6 +814,8 @@ export default {
             editActivityCptLectApi(competeLectData).then(() => {
               Notify({ type: 'success', message: '修改成功!' });
               this.handleBack(-1, 1)
+            }).catch(() => {
+              this.$loading(false, 'activityLoading')
             })
           }
         }

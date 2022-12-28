@@ -393,7 +393,7 @@ export default {
       this.listQuery[name] = !this.listQuery[name]
     },
     handleDateSelect(val) {
-      if (val.filter(item => item).length) {
+      if (val.filter(item => item).length === 2) {
         this.listQuery.startDate = `${dayjs(val[0]).format('YYYY/MM/DD')} 00:00:00 `
         this.listQuery.endDate = `${dayjs(val[1]).format('YYYY/MM/DD')} 23:59:59 `
       }
@@ -437,6 +437,7 @@ export default {
         this.$refs.vanDropItem3.toggle(false)
         this.$refs.vanDropItem4.toggle(false)
       }
+      console.log('this.listQuery',this.listQuery);
       this.$emit('onListQuery', this.listQuery)
     },
 

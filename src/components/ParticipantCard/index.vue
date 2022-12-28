@@ -6,15 +6,13 @@
           <div class="SH-name">{{studentData.name}}</div>
           <!-- 标签1 -->
           <div class="SH-tags">
-            <div class="SH-tag" :class="studentData.targetOne.isNew == 1 ? 'SH-tag-green':'SH-tag-yellow'" v-if="listType == 9 && studentData.targetOne && studentData.targetOne.isNew != null">{{studentData.targetOne.isNew == 1 ? '新用户' : '老用户'}}</div>
-            <div class="SH-tag" v-if="studentData.targetOne && studentData.targetOne.visit">{{ studentData.targetOne.visit }}天未回访</div>
-            <div class="SH-tag" v-if="studentData.followState && studentData.followState && listType == 9">{{studentData.followState}}</div>
-            <div class="SH-tag" v-if="studentData.targetOne && studentData.targetOne.followUp && listType !== '9'">待跟进</div>
-            <!-- studentData.targetOne.reserveState === 0 || studentData.targetOne.reserveState === 1 -->
+            <div class="SH-tag" :class="studentData.targetOne.isNew == 1 ? 'SH-tag-green':'SH-tag-yellow'" v-if="studentData.targetOne && studentData.targetOne.isNew != null">{{studentData.targetOne.isNew == 1 ? '新用户' : '老用户'}}</div>
+            <div class="SH-tag" v-if="studentData.followState && studentData.followState">{{studentData.followState}}</div>
             <div class="SH-tag" v-if="studentData.targetOne && Number.isInteger(studentData.targetOne.reserveState)">{{studentData.targetOne.reserveState ? '已预约已完成' : '已预约未完成'}}</div>
             <div class="SH-tag" v-if="studentData.targetOne && studentData.targetOne.attribute">{{ studentData.targetOne.attribute | classLevel }}</div>
           </div>
         </div>
+
         <div class="SH-r">
           <div class="SH-r-icon" @click.stop="handleRotate">
             <img class="SH-r-icon" :class="{'IconRotate': isRotate}" src="@/assets/images/icons/expend.png" alt="">
@@ -94,7 +92,7 @@
         </div>
         <!-- 5 意向信息/报考科目 -->
         <div class="student-info-item" v-if="system_hy_jc_wx.includes(currentSystemId) || system_zsb_jczsb_jxzsb_gwy.includes(currentSystemId)">
-          <div class="info-item" v-if="studentData.intentionSchool || studentData.registerSubject ">
+          <div class="info-item">
             <img src="@/assets/images/icons/exMore.png" alt="" class="info-img">
             <span v-if="system_hy_jc_wx.includes(currentSystemId)">
               <span class="blue-title-color">意向信息：</span>
@@ -121,7 +119,7 @@
           </div>
         </div>
         <!-- 12 备注 （未咨询）-->
-        <div class="student-info-item" v-if="listType == 4">
+        <div class="student-info-item" v-if="studentData.remark">
           <div class="info-item">
             <span>
               <span class="gray-title-color">备注：</span>
@@ -158,7 +156,6 @@
               <span class="blue-title-color">
                 <span :style="`color: ${studentData.color}`">{{studentData.consultRecordList[0].intentionName + '(' + studentData.consultRecordList[0].describe + ')'}} <span v-if="studentData.consultRecordList[0].courseNames">/{{studentData.consultRecordList[0].courseNames}}</span>：</span>
               </span>
-              <span v-if="studentData.consultResult">咨询结果—{{studentData.consultResult}},</span>
               <span>{{studentData.consultRecordList[0].content}}</span>
             </span>
           </div>
@@ -176,14 +173,13 @@
           <div class="student-line">
             <div class="line-square"></div>
           </div>
-
           <!-- 9 毕业年份、属性、性别、考试年份/考试界别/入学年份 讲座登记，活动的参与人员使用-->
           <div class="student-info-item" v-if="listType == 9">
             <div class="info-item">
               <img src="@/assets/images/icons/graduateYear.png" alt="" class="info-img">
               <span>
                 <span v-if="studentData.graduationYear">{{studentData.graduationYear}}毕业</span>
-                （<span>{{  filterFresh(studentData.isFresh)}}</span><span v-show="studentData.sex">；</span>
+                （<span>{{studentData.isFresh === 1 ? '在校生' : '社会考生'}}</span><span v-show="studentData.sex">；</span>
                 <span v-if="studentData.sex">{{studentData.sex === 1 ? '男' : '女'}}</span>）
               </span>
             </div>
@@ -192,7 +188,6 @@
               <span>{{studentData.examYear}}{{examYearText}}</span>
             </div>
           </div>
-
           <!-- 4 就读学校 -->
           <div class="student-info-item" v-if="listType == 9">
             <div class="info-item">
@@ -258,7 +253,7 @@
 
       <div v-if="!isCloseBtn">
         <!-- 1 咨询用户 -->
-        <div class="student-btns" v-if="listType === '1'">
+        <div class="student-btns" v-if="listType === '1' || listType === '9'">
           <van-button class="student-btn-item" v-permission="permissionList['RECORD_ADD'][listtype]" @click="handleConsulRecord">
             <img src="@/assets/images/icons/btn_record.png" alt="">
             <span>添加咨询记录</span>
@@ -279,7 +274,7 @@
           </van-button>
         </div>
         <!-- 4 未咨询 -->
-        <div class="student-btns" v-else-if="listType === '4'">
+        <div class="student-btns" v-else-if="listType === '4' || listType === '9'">
           <van-button class="student-btn-item" v-permission="permissionList['RECORD_ADD'][listtype]" @click="handleConsulRecord">
             <img src="@/assets/images/icons/btn_record.png" alt="">
             <span>添加咨询记录</span>
@@ -371,33 +366,6 @@
             <span>修改预约</span>
           </van-button>
         </div>
-
-        <div class="student-btns" v-else-if="listType === '9'">
-          <van-button class="student-btn-item" v-permission="permissionList['RECORD_ADD']['1']" @click="handleConsulRecord">
-            <img src="@/assets/images/icons/btn_record.png" alt="">
-            <span>添加咨询记录</span>
-          </van-button>
-          <van-button class="student-btn-item" v-permission="permissionList['CONSULT']['1']" @click="handlePopSelect({ text: '预约咨询', dialogName: 'isConsultSubscribeShow' })">
-            <img src="@/assets/images/icons/yuyue.png" alt="">
-            <span>预约咨询</span>
-          </van-button>
-          <van-button class="student-btn-item" v-permission="permissionList['BATCH_DISTRIBUTION']['1']" @click="handlePopSelect({ text: '分配咨询', dialogName: 'isConsultDistributeShow' })">
-            <img src="@/assets/images/icons/ConsultSubscribe.png" alt="">
-            <span>分配咨询</span>
-          </van-button>
-          <van-button class="student-btn-item" v-if="actions.length">
-            <van-popover v-model="showPopover" @select="handlePopSelect" trigger="click" :actions="actions" placement="bottom-end">
-              <template #reference>
-                <van-button class="student-btn-item">
-                  <img src="@/assets/images/icons/btn_moe.png" alt="">
-                  <span>更多</span>
-                </van-button>
-              </template>
-            </van-popover>
-          </van-button>
-
-        </div>
-
       </div>
     </div>
     <!-- 预约咨询 counselState: 是否可以删除，1不能删， 0可以删 -->
@@ -434,7 +402,6 @@ export default {
     },
     isCloseBtn: Boolean, // 关闭按钮
     isDetail: Boolean,
-    isFreshs: Array, // 属性
     /**
      * listType
      * 1: 咨询用户
@@ -450,7 +417,7 @@ export default {
      *  
     */
     listType: String,
-
+    
   },
   components: {
     ConsultSubscribe: () => import('../ConsultSubscribe/index'),
@@ -496,7 +463,6 @@ export default {
     }
   },
   filters: {
-
     classLevel(val) {
       let str = ''
       switch (val) {
@@ -537,6 +503,7 @@ export default {
   },
   activated() {
     if (this.jumoStudentId) {
+      console.log('7777');
       this.handleUpdataInfo()
     }
   },
@@ -561,8 +528,7 @@ export default {
     }),
     actions() {
       let arr
-      console.log('this.permissionLis', this.permissionList['EDIT']);
-      if (this.listType === '1') {
+      if (this.listType === '1' || this.listType === '9') {
         return [
           { text: this.studentData.reserveConsultId ? '修改预约' : '预约咨询', dialogName: 'isConsultSubscribeShow', permission_btn: this.permissionList['CONSULT'][this.listtype] },
           { text: '分配咨询', dialogName: 'isConsultDistributeShow', permission_btn: this.permissionList['BATCH_DISTRIBUTION'][this.listtype] },
@@ -589,30 +555,12 @@ export default {
           { text: '放入公海', dialogName: 'isConsultSeaShow', permission_btn: this.permissionList['PUT_PUBLIC'][this.listtype] },
           { text: '新增订单', dialogName: '', permission_btn: this.permissionList['ADD_ORDER'][this.listtype] }
         ]
-      } else if (this.listType === '9') {
-        arr = [
-          { text: '编辑', dialogName: 'editStudent', permission_btn: this.permissionList['EDIT']['1'] },
-          { text: '添加咨询记录', dialogName: 'addCounselRecord', permission_btn: this.permissionList['RECORD_ADD']['1'] },
-          { text: '修改市场区域', dialogName: 'isConsultMarketAreaShow', permission_btn: this.permissionList['MARKET_AREA']['1'] },
-          { text: '移交', dialogName: 'isConsultDeliverShow', permission_btn: this.permissionList['HAND_OVER']['1'] },
-          { text: '转交', dialogName: 'isConsultHandOverShow', permission_btn: this.permissionList['DELIVER']['1'] },
-          { text: '放入公海', dialogName: 'isConsultSeaShow', permission_btn: this.permissionList['PUT_PUBLIC']['1'] },
-          { text: '新增订单', dialogName: '', permission_btn: this.permissionList['ADD_ORDER']['1'] }
-        ]
       }
       arr = arr.filter(item => this.permission_btns.includes(item.permission_btn))
       return arr
     }
   },
   methods: {
-    filterFresh(val) {
-      if (this.isFreshs) {
-        const { text } = this.isFreshs.find(v => val == v.value) || {}
-        return text
-      } else {
-        return ''
-      }
-    },
     isTargetExist(val) {
       let isExist = false
       if (val && (val.consultCount || val.handoverCount || val.activityCount)) isExist = true
@@ -720,7 +668,7 @@ export default {
       }).catch(() => {
         this.jumoStudentId = null
       }).finally(() => {
-        this.$emit('onUpdataInfo', info)
+          this.$emit('onUpdataInfo', info)
       })
     },
 
