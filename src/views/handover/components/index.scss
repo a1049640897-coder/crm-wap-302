@@ -1,0 +1,240 @@
+$hf-contain-p: 0 1.2rem;
+$hf-contain-f: 0.76rem;
+$hf-high-color: #0088fe;
+$hf-green-color: #67C23A;
+$hf-red-color: #F56C6C;
+
+.header-filter {
+  background: #ffffff;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: $hf-contain-p;
+
+  .hf-l-list {
+    .hf-l-list-menu {
+      /deep/.van-dropdown-menu__bar {
+        height: auto;
+        box-shadow: none;
+
+        .van-dropdown-menu__item {
+          flex: inherit;
+          margin-right: 1rem;
+
+          .van-dropdown-menu__title {
+            padding: 0.6rem 0.4rem 0.6rem 0;
+            font-size: $hf-contain-f;
+
+            &::after {
+              border: 1px solid;
+              padding: 0.1rem;
+              border-color: transparent transparent #333333 #333333;
+            }
+          }
+
+          .van-dropdown-menu__title--active {
+            color: $hf-high-color;
+
+            &::after {
+              border-color: transparent transparent $hf-high-color $hf-high-color;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .hf-r-list {
+    display: flex;
+
+    .hf-r-list-item {
+      margin-left: 0.4rem;
+
+      .hf-r-icon-bg {
+        background: #d7d7d7;
+        width: 1.5rem;
+        height: 1.5rem;
+        border-radius: 1.5rem;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color: #ffffff;
+      }
+
+      .hf-r-icon-bg-act {
+        background: $hf-high-color;
+      }
+    }
+  }
+
+  .hf-drop-view {
+    padding: $hf-contain-p;
+    padding-bottom: 0.8rem;
+
+    // 左右tab筛选
+    .zl-drop-tab {
+      display: flex;
+      // background: red;
+      font-size: 0.1rem;
+      color: #333333;
+
+      .zl-drop-tab-lf,
+      .zl-drop-tab-rt {
+        border: 0.1rem solid #D7D7D7;
+        border-radius: 2rem;
+        // margin-left: 1rem;
+        // padding: 0.1rem;
+        background-color: #D7D7D7;
+        height: 2rem;
+        // opacity: 0.5;
+        width: 5rem;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .zl-drop-tab-rt {
+        margin-left: 0.5rem;
+      }
+
+      .zl-drop-tab-actived {
+        background-color: #ffffff;
+        border: 0.1rem solid #0088FE;
+        color: #0088FE;
+      }
+    }
+
+    .hf-drop-contain {
+      display: flex;
+      flex-wrap: wrap;
+      padding-bottom: 0.8rem;
+
+      .hr-drop-filter-item {
+        padding: $hf-contain-p;
+        font-size: $hf-contain-f;
+        width: 50%;
+        box-sizing: border-box;
+        padding: 0.8rem 0;
+      }
+
+      .hr-drop-filter-item-act {
+        color: $hf-high-color;
+      }
+    }
+
+    // 快捷筛选
+    .hf-drop-quick {
+      margin-top: 1rem;
+
+      .hf-drop-quick-item {
+        margin-bottom: 1.5rem;
+
+        .hf-drop-quick-title {
+          color: #333333;
+          font-size: 0.84rem;
+        }
+
+        .hf-drop-quick-list {
+          display: flex;
+          margin: 0.6rem 0;
+          font-size: $hf-contain-f;
+
+          .hf-drop-quick-list-item {
+            border: 1px solid #f3f3f3;
+            background: #f3f3f3;
+            margin-right: 0.8rem;
+            padding: 0.4rem 0.6rem;
+            border-radius: 1rem;
+            transition: background-color, color 0.2s linear;
+          }
+
+          .hf-drop-quick-list-item-act {
+            background: #ffffff;
+            color: $hf-high-color;
+            border: 1px solid $hf-high-color;
+          }
+
+          .hf-drop-quick-list-item-checkbox {
+            margin-right: 1rem;
+
+            /deep/.van-checkbox__label {
+              margin-left: 0.2rem;
+            }
+          }
+        }
+
+        .hf-drop-quick-calendar {
+          /deep/.van-calendar__header {
+            box-shadow: none;
+            border-bottom: 1px solid #eeeeee;
+          }
+        }
+      }
+
+      .hf-fast-date {
+        display: flex;
+
+        .hf-fast-date-btn {
+          width: 11.11%;
+          text-align: center;
+          font-size: 0.8rem;
+        }
+
+        .fastDateCheck {
+          color: $hf-high-color;
+        }
+      }
+    }
+  }
+
+  .hf-drop-contain-empty {
+    color: #666666;
+    text-align: center;
+    font-size: 0.8rem;
+    margin: 0.5rem 0 1rem 0;
+  }
+}
+
+.top-statistics {
+  background-color: white;
+  padding: 0.4rem 1.2rem 0.6rem;
+  display: flex;
+  font-size: 0.76rem;
+
+  .statist-item {
+    margin-right: 0.6rem;
+
+    .line {
+      position: relative;
+      top: 0.16rem;
+      display: inline-block;
+      height: 0.8rem;
+      width: 0.06rem;
+      margin-left: 0.3rem;
+      left: 0.3rem;
+      background-color: #999;
+    }
+
+    /deep/.van-loading {
+      display: inline-block;
+    }
+  }
+
+  .statist-item:nth-child(1) {
+    color: $hf-high-color;
+  }
+
+  .statist-item:nth-child(2) {
+    color: $hf-green-color;
+  }
+
+  .statist-item:nth-child(3) {
+    color: $hf-red-color;
+    margin-right: 0;
+  }
+}
+
+.moreContain {
+  max-height: 85vh;
+  overflow: auto;
+}

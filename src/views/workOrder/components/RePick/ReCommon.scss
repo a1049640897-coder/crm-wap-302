@@ -1,0 +1,147 @@
+// 单选框
+.Re-select {
+  position: relative;
+}
+
+
+.Re-show {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border: 1px solid #ddd;
+  border-radius: 0.3rem;
+  font-size: 1rem;
+  padding: 0.5rem;
+  transition: border-color 0.3s linear;
+  margin: 0.5rem 0;
+
+  &:active {
+    border-color: #409EFF;
+  }
+
+  .Re-show-label {
+    color: #333333;
+  }
+  .Re-show-view {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    .Re-show-placeholder {
+      color: #999999;
+    }
+    .Re-show-value {
+      color: #333333;
+    }
+    .Re-show-default-value {
+      flex: 1;
+    }
+    .Re-show-icon {
+      margin-left: 0.2rem;
+      margin-top: 0.2rem;
+      font-size: 1rem;
+      color: #999999;
+    }
+  }
+}
+
+.Re-select-popup {
+  .Re-select-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    .Re-select-header-cancel {
+      color: #F56C6C;
+      padding: 8px 14px;
+      &:active {
+        background: #eeeeee;
+      }
+    }
+    .Re-select-header-title {
+      color: #333333;
+    }
+    .Re-select-header-confirm {
+      color: #409EFF;
+      padding: 8px 14px;
+      &:active {
+        background: #eeeeee;
+      }
+    }
+  }
+  .Re-select-bread {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    .bread-item {
+      display: flex;
+      align-items: center;
+      font-size: 14px;
+      .bread-active {
+        color: #409EFF;
+      }
+    }
+  }
+  .Re-select-contain {
+    padding-left: 16px;
+    overflow: auto;
+    .empty-text {
+      color: #999999;
+      text-align: center;
+      margin-top: 30px;
+    }
+  }
+}
+
+.nextBtn {
+  margin-right: 15px;
+  width: 70px;
+}
+// .Re-search-input {
+//   display: flex;
+//   justify-content: space-around;
+//   align-items: center;
+//   font-size: 1rem;
+//   // border: 1px solid #ddd;
+//   margin: 0.8rem;
+//   padding: 0.6rem;
+//   background: #f7f8fa;
+  
+//   .Re-search-icon {
+//     font-size: 1rem;
+//   }
+//   .Re-search-lefticon {
+//     margin-right: 0.2rem;
+//   }
+//   .Re-search-righticon {
+//     color: #c8c9cc;
+//     font-size: 1rem;
+//   }
+// }
+
+// .Re-input {
+//   outline: none;
+//   font-size: 14px;
+//   display: block;
+//   box-sizing: border-box;
+//   width: 100%;
+//   min-width: 0;
+//   margin: 0 2px;
+//   padding: 0;
+//   color: #323233;
+//   text-align: left;
+//   background-color: transparent;
+//   border: 0;
+//   resize: none;
+//   font-weight: normal;
+//   -webkit-font-smoothing: antialiased;
+//   -webkit-appearance: none;
+
+//   &:focus {
+//     outline: 0;
+//   }
+//   &::placeholder {
+//     color: #cecfd2;
+//   }
+//   &::-webkit-search-cancel-button {
+//     display: none;
+//   }
+// }

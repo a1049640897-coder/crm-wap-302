@@ -1,0 +1,13 @@
+.student {
+  margin-bottom: 4.5rem;
+  position: relative;
+  .student-btns {
+    background: #ffffff;
+    bottom: 0;
+    padding-bottom: 1.3rem;
+    width: 100%;
+    position: fixed;
+    display: flex;
+    justify-content: space-between;
+  }
+}

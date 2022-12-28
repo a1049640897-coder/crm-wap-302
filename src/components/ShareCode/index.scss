@@ -1,0 +1,65 @@
+.help_box {
+  padding: 20px 12px;
+  height: 100%;
+  background: #fff;
+}
+
+.help_box_in {
+  width: 100%;
+  height: 100px;
+  border-color: unset;
+  box-shadow: #99999933 1px 1px 9px 0px;
+  border-radius: 8px;
+  font-size: 14px;
+  padding: 12px;
+  box-sizing: border-box;
+}
+
+.title {
+  font-family: PingFangSC;
+  font-weight: 400;
+  font-size: 14px;
+  color: rgb(16, 16, 16);
+}
+
+.content {
+  display: flex;
+}
+
+.people_icon {
+  margin-top: 20px;
+}
+
+.content_box {
+  margin-left: 12px;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  padding: 12px 0;
+  border-bottom: 1px solid #ccc;
+}
+
+.content_box_text {
+  width: 100%;
+  border: 0;
+  display: inline-block;
+  font-family: PingFangSC;
+  font-weight: 400;
+  height: 30px;
+  color: rgba(153, 153, 153, 1);
+  line-height: 30px;
+}
+
+.content_box_btn {
+  display: inline-block;
+  color: #fff;
+  width: 90px;
+  height: 30px;
+  background-color: rgb(25, 102, 222);
+  border-style: none;
+  border-color: unset;
+  border-radius: 4px;
+  font-size: 14px;
+  text-align: center;
+  line-height: 30px;
+}

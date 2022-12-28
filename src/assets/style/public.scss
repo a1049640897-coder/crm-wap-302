@@ -1,0 +1,362 @@
+// vant补丁
+@import '~@/assets/style/fixed/vant.scss';
+
+// 进度条补丁
+@import '~@/assets/style/fixed/n-progress.scss';
+
+// 动画
+@import '~@/assets/style/animate/vue-transition.scss';
+
+// 激活的颜色
+$hf-high-color: #0088fe;
+
+html {
+  background: #fafafa;
+  min-height: 100vh;
+  overflow-y: auto;
+  overflow-x: hidden;
+  box-sizing: border-box;
+  color: #333333;
+}
+
+body {
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+#app {
+  font-family: "PingFang SC","Helvetica Neue",Helvetica,"Hiragino Sans GB","Microsoft YaHei","微软雅黑",Arial,sans-serif;
+}
+
+*,
+*:before,
+*:after {
+  box-sizing: inherit;
+}
+
+a,
+a:focus,
+a:hover {
+  cursor: pointer;
+  color: inherit;
+  outline: none;
+  text-decoration: none;
+}
+
+div:focus {
+  outline: none;
+}
+
+a:focus,
+a:active {
+  outline: none;
+}
+
+a,
+a:focus,
+a:hover {
+  cursor: pointer;
+  color: inherit;
+  text-decoration: none;
+}
+
+.clearfix {
+  &:after {
+    visibility: hidden;
+    display: block;
+    font-size: 0;
+    content: " ";
+    clear: both;
+    height: 0;
+  }
+}
+
+//main-container全局样式
+.app-main {
+  min-height: 100%
+}
+
+.app-container {
+  padding: 20px;
+}
+
+.m0 {
+  margin: 0;
+}
+
+.ml5 {
+  margin-left: 0.5rem;
+}
+
+.mt5 {
+  margin-top: 0.5rem;
+}
+
+.mr5 {
+  margin-right: 0.5rem;
+}
+
+.mb5 {
+  margin-bottom: 0.5rem;
+}
+
+.p0 {
+  padding: 0;
+}
+
+.pl0 {
+  padding-left: 0;
+}
+
+.pt0 {
+  padding-top: 0;
+}
+
+.pr0 {
+  padding-right: 0;
+}
+
+.pb0 {
+  padding-bottom: 0;
+}
+
+.pl5 {
+  padding-left: 0.5rem;
+}
+
+.pt5 {
+  padding-top: 0.5rem;
+}
+
+.pr5 {
+  padding-right: 0.5rem;
+}
+
+.pb5 {
+  padding-bottom: 0.5rem;
+}
+
+.flex {
+  display: flex;
+}
+
+.flex-center {
+  justify-content: center;
+}
+
+.flex-around {
+  justify-content: space-around;
+}
+
+.flex-c {
+  display: flex;
+  flex-direction: column;
+}
+
+.flex-c-center {
+  align-items: center;
+}
+
+.sbt {
+  justify-content: space-between;
+}
+
+.w100 {
+  width: 100%;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none !important;
+  margin: 0;
+}
+
+.text-hidden {
+  word-break: keep-all;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.van-cell-group .Re-select {
+  &::after {
+    position: absolute;
+    box-sizing: border-box;
+    content: ' ';
+    pointer-events: none;
+    right: 16px;
+    bottom: 0;
+    left: 16px;
+    border-bottom: 1px solid #ebedf0;
+    -webkit-transform: scaleY(.5);
+    transform: scaleY(.5);
+  }
+
+  &::after:last-child {
+    display: none;
+  }
+}
+
+.van-tabbar {
+  .van-tabbar-item {
+    height: 50px !important;
+  }
+}
+
+.requireRed {
+  color: #F56C6C;
+  font-size: 1.2rem;
+}
+
+.common-empty {
+  color: #666666;
+  text-align: center;
+  padding: 1rem 0;
+  font-size: 0.86rem;
+
+  img {
+    width: 12rem;
+    height: auto;
+  }
+}
+
+.common-act-color {
+  color: $hf-high-color;
+
+  .van-ellipsis {
+    color: $hf-high-color;
+  }
+}
+
+.common-list-contain {
+  padding: 0.6rem 0.6rem 0 0.6rem;
+}
+
+.common-header {
+  padding: 0.6rem 1.2rem;
+}
+
+.common-double-button {
+  width: 100%;
+  display: flex;
+  background: #0088FE;
+  border-radius: 10rem;
+  position: relative;
+
+  .common-double-button-l {
+    color: #333333;
+    border: 1px solid #0088FE;
+    width: 52.5%;
+    border-radius: 10rem;
+    z-index: 10;
+  }
+
+  .common-double-button-r {
+    background: #0088FE;
+    color: #ffffff;
+    width: 54%;
+    border-radius: 10rem;
+    border-color: #0088FE;
+    position: absolute;
+    right: 0;
+  }
+}
+
+.common-popup {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+
+  .common-popup-header {
+    padding: 0.8rem;
+    text-align: center;
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+
+    .common-popup-header-title {
+      color: #333333;
+      font-size: 0.9rem;
+      width: 100%;
+    }
+
+    .common-popup-header-close {
+      .van-icon-cross {
+        color: #999999;
+      }
+    }
+  }
+
+  .common-popup-body {
+    flex: 1;
+    overflow: auto;
+  }
+
+  .common-popup-footer {
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+    display: flex;
+    justify-content: center;
+  }
+}
+
+.common-bottom-btns {
+  position: fixed;
+  bottom: 10.5rem;
+  right: 0;
+  font-size: 0.8rem;
+
+  .common-bottom-btn {
+    display: flex;
+    align-items: center;
+    background: #d0e3f3;
+    color: #0088FE;
+    border-top-left-radius: 1rem;
+    border-bottom-left-radius: 1rem;
+    padding: 0.3rem 0.3rem 0.3rem 0.5rem;
+
+    img {
+      width: 0.9rem;
+      height: auto;
+      margin-right: 0.1rem;
+    }
+  }
+}
+
+///////////////
+// 学员档案使用
+.student-more-btns {
+  display: flex;
+  justify-content: space-between;
+}
+
+.student-b-btn {
+  background: #ffffff;
+  width: 100%;
+  border: none !important;
+  padding: 1rem 0.5rem 0.5rem 0.5rem !important;
+  box-sizing: content-box !important;
+  text-align: center;
+  font-size: 0.78rem;
+  word-break: keep-all;
+
+  img {
+    width: 1.2rem;
+    height: auto;
+  }
+}
+
+/////////////
+
+.common-mbLine .van-field::after {
+  display: block !important;
+  position: absolute;
+  box-sizing: border-box;
+  content: ' ';
+  pointer-events: none;
+  right: 16px;
+  bottom: 0;
+  left: 16px;
+  border-bottom: 1px solid #ebedf0;
+  transform: scaleY(.5);
+}

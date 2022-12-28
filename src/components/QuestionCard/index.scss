@@ -1,0 +1,211 @@
+$S-radius: 0.3rem;
+$S-color: #0088fe;
+
+.student-card {
+  .student-base {
+    background: #ffffff;
+    border-radius: $S-radius;
+    font-size: 0.86rem;
+    padding-bottom: 0.6rem;
+    padding: 4px 4px;
+
+    .student-header {
+      font-size: 1.2rem;
+      margin-bottom: 0.7rem;
+      display: flex;
+      justify-content: space-between;
+
+      span {
+        font-size: 0.8rem;
+        border-radius: 0.2rem;
+        border: solid 2px #ccc;
+        padding: 0.15rem;
+      }
+
+      .student-header-lf {
+        display: flex;
+        align-items: center;
+        span {
+          margin-left: 0.5rem;
+        }
+      }
+
+      .student-header-rt {
+        font-size: 0.8rem;
+        display: flex;
+        align-items: center;
+        color: #1497F0;
+      }
+    }
+
+    .info-img {
+      width: 1rem;
+      height: auto;
+      vertical-align: middle;
+      margin-right: 0.2rem;
+    }
+
+    .student-body-1 {
+      color: #67C23A;
+      margin-bottom: 0.4rem;
+    }
+
+    .student-info-item {
+      margin-bottom: 0.4rem;
+
+      .info-item {
+        display: inline-block;
+        position: relative;
+        margin-right: 1rem;
+        // margin-bottom: 0.5rem;
+        vertical-align: middle;
+
+        .item-col {
+          color: #D7D7D7;
+          margin-right: 0.5rem;
+        }
+
+        &::after {
+          top: 50%;
+          position: absolute;
+          content: '';
+          width: 1px;
+          height: 80%;
+          background: #999999;
+          margin: 0 0.5rem;
+          transform: translate(-50%, -50%);
+        }
+
+        .info-img {
+          width: 1rem;
+          height: auto;
+          vertical-align: middle;
+          margin-right: 0.2rem;
+        }
+
+        .info-item-time {
+          color: #999999;
+          margin-left: 1.2rem;
+        }
+      }
+
+      .info-img {
+        width: 1rem;
+        height: auto;
+        vertical-align: text-bottom;
+        margin-right: 0.2rem;
+      }
+
+      .info-item:last-child {
+        &::after {
+          display: none;
+        }
+      }
+
+      .info-item::after {
+        display: none;
+      }
+    }
+    .student-info-address {
+       .student-info-address-school {
+         margin-bottom: 0.4rem;
+       }
+    }
+
+    .student-footer {
+
+      // padding-left: 0.5rem;
+      .student-footer-header {
+        margin-bottom: 0.5rem;
+      }
+
+      .student-footer-body {
+        // border-left: 0.2rem dotted #D7D7D7;
+        // padding-left: 1rem;
+        margin: 0.6rem 0;
+
+        .student-footer-body-item {
+          position: relative;
+          border-left: 0.2rem dotted #D7D7D7;
+          padding-left: 0.5rem;
+          margin-left: 0.3rem;
+          margin-bottom: 0.2rem;
+
+          // letter-spacing: ;
+          .dot {
+            display: inline-block;
+            border-radius: 100%;
+            width: 0.5rem;
+            height: 0.5rem;
+            background-color: #D7D7D7;
+            vertical-align: middle;
+            position: absolute;
+            top: 0.5rem;
+            left: -0.6rem;
+            z-index: 1;
+          }
+
+          span {
+            margin-left: 0.2rem;
+            color: #333;
+          }
+        }
+      }
+
+      .student-footer-page {
+        display: flex;
+        flex-direction: column;
+
+        .student-footer-page-bottom {
+          padding-left: 1.3rem;
+          margin: 0.3rem 0;
+          color: rgba(153, 153, 153, 100);
+        }
+      }
+    }
+
+
+  }
+
+}
+
+.green-color {
+  .info-item {
+    color: #67C23A !important;
+
+    &::after {
+      background: #67C23A !important;
+    }
+  }
+}
+
+.gray-title-color {
+  color: #999999;
+}
+
+.blue-title-color {
+  color: #0088FE;
+}
+
+.ques-overlay {
+  .ques-title {
+    font-size: 1rem;
+    display: flex;
+    justify-content: center;
+    // height: 20%;
+    margin-top: 1rem;
+  }
+
+  .ques-body {
+    padding: 0.6rem;
+    width: 100%;
+    margin-top: 1rem;
+
+    .ques-body-item {
+      border-bottom: 1px solid rgb(238, 234, 234);
+      padding: 0.5rem 0rem;
+      font-size: 1.1rem;
+      margin-bottom: 1rem;
+    }
+  }
+}

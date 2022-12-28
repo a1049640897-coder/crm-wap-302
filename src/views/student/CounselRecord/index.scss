@@ -1,0 +1,33 @@
+.cousel-record {
+  font-size: 0.86rem;
+  .cousel-record-title {
+    color: #999999;
+    margin: 0.5rem;
+    display: flex;
+    justify-content: space-between;
+    img {
+      width: 1rem;
+      height: auto;
+      transition: all 0.2s linear;
+    }
+    .rotate {
+      transform: rotate(180deg);
+    }
+  }
+  .cousel-record-footer {
+    background: #ffffff;
+    margin-top: 1rem;
+    padding: 0.5rem;
+    display: flex;
+    justify-content: center;
+
+    .record-btn {
+      border-radius: 0.5rem;
+      width: 100%;
+    }
+    .record-btn-danger {
+      border-color: #F56C6C;
+      color: #F56C6C;
+    }
+  }
+}
