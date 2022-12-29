@@ -28,6 +28,7 @@
 </template>
 <script>
 import { activityhandoverListApi, activityheaderStatisticalApi } from '@/api/potentialGuest/activity'
+import { mapState } from 'vuex'
 // 移交情况
 export default {
   props: {},
@@ -35,6 +36,11 @@ export default {
     HandoverFilter: () => import('./HandoverFilter'),
     RMList: () => import('@/components/ReComponents/RMList'),
     StudentCard: () => import('@/components/HandoverCard')
+  },
+  computed: {
+    ...mapState({
+      pageSize: state => state.common.setting.pageSize,
+    })
   },
   data() {
     return {
@@ -112,7 +118,7 @@ export default {
       const query = {
         pageinfo: {
           ...this.listQuery.pageinfo,
-          // pageSize: this.pageSize/* ,
+          pageSize: this.pageSize/* ,
           // sort: [this.listQuery.pageinfo.sort] */
         },
         handoverParameterVO: {

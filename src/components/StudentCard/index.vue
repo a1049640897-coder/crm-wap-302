@@ -156,7 +156,7 @@
             <img src="@/assets/images/icons/record.png" alt="" class="info-img">
             <span>
               <span class="blue-title-color">
-                <span :style="`color: ${studentData.color}`">{{studentData.consultRecordList[0].intentionName + '(' + studentData.consultRecordList[0].describe + ')'}} <span v-if="studentData.consultRecordList[0].courseNames">/{{studentData.consultRecordList[0].courseNames}}</span>：</span>
+                <span :style="`color: ${studentData.intentionColor}`">{{studentData.consultRecordList[0].intentionName + '(' + studentData.consultRecordList[0].describe + ')'}} <span v-if="studentData.consultRecordList[0].courseNames">/{{studentData.consultRecordList[0].courseNames}}</span>：</span>
               </span>
               <span v-if="studentData.consultResult">咨询结果—{{studentData.consultResult}},</span>
               <span>{{studentData.consultRecordList[0].content}}</span>
@@ -561,7 +561,6 @@ export default {
     }),
     actions() {
       let arr
-      console.log('this.permissionLis', this.permissionList['EDIT']);
       if (this.listType === '1') {
         return [
           { text: this.studentData.reserveConsultId ? '修改预约' : '预约咨询', dialogName: 'isConsultSubscribeShow', permission_btn: this.permissionList['CONSULT'][this.listtype] },
@@ -700,28 +699,32 @@ export default {
     handleEditStudentInfo() {
       this.jumoStudentId = this.sId
       this.$router.push({
-        path: `/studentinfoedit/${this.sId}`
+        path: `/studentinfoedit/${this.sId}`,
       })
     },
 
     handleUpdataInfo() {
-      const api = this.listType === 'yuYueZiXun' ? appointmentConsultationInfoApi : consultationInfoApi
-      let info = {}
-      api(this.sId, Number(this.listType)).then(res => {
-        info = res.data
-        if (this.listType === 'yuYueZiXun') {
-          info.id = this.studentData.id
-          info.studentId = this.studentData.studentId
-        }
-        setTimeout(() => {
+      if (this.listType === '9') {
+        this.$emit('onUpdataInfo', this.studentData.id)
+      } else {
+        const api = this.listType === 'yuYueZiXun' ? appointmentConsultationInfoApi : consultationInfoApi
+        let info = {}
+        api(this.sId, Number(this.listType)).then(res => {
+          info = res.data
+          if (this.listType === 'yuYueZiXun') {
+            info.id = this.studentData.id
+            info.studentId = this.studentData.studentId
+          }
+          setTimeout(() => {
+            this.$emit('onUpdataInfo', info)
+          }, 2000)
+          this.jumoStudentId = null
+        }).catch(() => {
+          this.jumoStudentId = null
+        }).finally(() => {
           this.$emit('onUpdataInfo', info)
-        }, 2000)
-        this.jumoStudentId = null
-      }).catch(() => {
-        this.jumoStudentId = null
-      }).finally(() => {
-        this.$emit('onUpdataInfo', info)
-      })
+        })
+      }
     },
 
     handleUpFollow() {

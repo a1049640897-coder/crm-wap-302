@@ -34,16 +34,27 @@
 </template>
 <script>
 import { postPartStudentListApi, postPartStudentCountApi, postPartStudentConditonApi } from '@/api/potentialGuest/activity'
-
+import { mapState } from 'vuex'
 // 参与人员
 export default {
   props: {
-    counselTab: String
+    counselTab: String,
+    onlyReadObj: {
+      type: Object,
+      default() {
+        return {}
+      }
+    }
   },
   components: {
     ParticipantFilter: () => import('./ParticipantFilter'),
     RMList: () => import('@/components/ReComponents/RMList'),
     StudentCard: () => import('@/components/StudentCard')
+  },
+  computed: {
+    ...mapState({
+      pageSize: state => state.common.setting.pageSize,
+    })
   },
   data() {
     return {
@@ -80,16 +91,32 @@ export default {
     this.handleInit('firstRequest')
   },
 
+
   methods: {
     reSetSingleList(id) {
       let listQuery = JSON.parse(JSON.stringify(this.listQuery))
-      listQuery.id = id
+      listQuery.param.id = id
+      this.$loading(true, 'partLoading')
       postPartStudentListApi(listQuery).then(res => {
-        console.log('resss...', res.data);
+        if (res.data && res.data.length) {
+          if (this.tableList.find(v => v.id == res.data[0].id)) {
+            let index = this.tableList.findIndex(v => v.id == res.data[0].id)
+            this.$set(this.tableList, index, res.data[0])
+            this.handleSetBranchId()
+            this.$loading(false, 'partLoading')
+          } else {
+            this.$loading(false, 'partLoading')
+          }
+        } else {
+          this.$loading(false, 'partLoading')
+        }
+      }).catch(() => {
+        this.$loading(false, 'partLoading')
       })
     },
-    handleUpdataInfo() {
-      this.$emit('onUpdataInfo')
+    handleUpdataInfo(id) {
+      console.log('handleUpdataInfo', id);
+      this.reSetSingleList(id)
     },
     checkPermissionStatus(counselTab) {
       if (counselTab == 'LectureReg') {
@@ -112,7 +139,11 @@ export default {
     },
     handleAddStudent() {
       this.$router.push({
-        path: `/studentinfoedit/null`
+        path: `/studentinfoedit/null`,
+        query: {
+          sid: this.$route.params.sid,
+          onlyReadObj: this.onlyReadObj
+        }
       })
     },
     handleInit(val) {
@@ -123,7 +154,7 @@ export default {
       this.getTableList('init', val)
     },
     handleListQuery(paramProp) {
-      this.listQuery.pageinfo.sort = paramProp.sortRule ? [{ ...paramProp.sortRule }] : [],
+      this.listQuery.pageinfo.sort = paramProp.sortRule ? [{ ...paramProp.sortRule }] : [{ type: 1, column: 'addTime' }],
         this.listQuery.param = {
           ...this.listQuery.param,
           ...paramProp,
@@ -146,7 +177,6 @@ export default {
     getListConditon() {
       this.listQuery.param.activityId = [this.sId]
       postPartStudentConditonApi(this.listQuery.param).then(res => {
-        console.log('res', res.data);
         this.listConditonObj = res.data || { attendSchools: [], consultResults: [], consultants: [], intentionClasss: [], intentions: [], isFreshs: [], owners: [], schoolManagers: [] }
         this.listConditonObj.consultResults = (this.listConditonObj.consultResults || []).map(v => {
           return {
@@ -166,6 +196,13 @@ export default {
         })
       })
     },
+
+    handleSetBranchId() {
+      this.tableList.forEach(v => {
+        this.$set(v, 'branchId', v.sysShellId)
+      })
+    },
+
     getTableList(val, type) {
       this.moreLoading = true
       this.$loading(true, 'partStudentTableLoading')
@@ -173,8 +210,7 @@ export default {
       const query = {
         pageinfo: {
           ...this.listQuery.pageinfo,
-          pageSize: this.pageSize/* ,
-          sort: [this.listQuery.pageinfo.sort] */
+          pageSize: this.pageSize,
         },
         param: {
           ...this.listQuery.param,
@@ -186,8 +222,10 @@ export default {
         if (['init', 'refresh'].includes(val)) {
           this.getListCount()
           this.tableList = res.data || []
+          this.handleSetBranchId()
         } else {
           this.tableList = this.tableList.concat(res.data || [])
+          this.handleSetBranchId()
         }
         if (res.data.length < this.pageSize) {
           this.finished = true

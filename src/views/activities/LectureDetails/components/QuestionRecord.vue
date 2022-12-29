@@ -135,7 +135,7 @@ export default {
         }
         // 获取头部标题信息
         activityQuesDetailApi(this.sId).then(res => {
-          res.data.questionnaireId ? activityQuesHeaderApi(res.data.questionnaireId).then(headerRes => {
+          res.data.questionnaireId ? activityQuesHeaderApi(res.data.questionnaireId, this.sId).then(headerRes => {
             this.headerTitle = headerRes.data.title
           }) : this.headerTitle = null
 

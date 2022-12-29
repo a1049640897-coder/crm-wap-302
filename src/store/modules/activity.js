@@ -174,7 +174,7 @@ export default {
     activityIsAddUpdate: false, // 添加活动列表是否刷新
     isDetailsEnter: false, // 是否是详情进入编辑
     activityPartId: null, // 参与人员id
-    activityPartIsUpdate: false, // 参与人员列表是否
+    activityPartIsUpdate: false, // 参与人员列表是否重新刷新
   },
   mutations: {
     SET_QUERYLIST(state, queryList) {
@@ -252,6 +252,13 @@ export default {
       const { activityPartId } = payload
       console.log('activityPartId...', activityPartId);
       state.activityPartId = activityPartId
+    },
+
+    // 设置参与人员刷新
+    SET_PARTUSERUPDATE(state, payload) {
+      const { activityPartIsUpdate } = payload
+      console.log('activityPartIsUpdate...', activityPartIsUpdate);
+      state.activityPartIsUpdate = activityPartIsUpdate
     }
   },
   actions: {

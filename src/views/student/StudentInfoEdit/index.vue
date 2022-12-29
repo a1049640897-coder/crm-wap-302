@@ -4,7 +4,9 @@
       <div class="student-info-edit-title">
         <span>必填信息</span>
       </div>
-      <RePick v-if="!sId" v-model="listQuery.entity.sysShellId" label="所属分校" :list="shellList" @change="handleSysShellId" isShowSearch isCascader name="sysShellId" childrenKey="child" :disabled="shellList.length === 1 && (!shellList[0].hasChildren || shellList[0].child.length === 1)" isRequrie isCell clearable />
+      <RePick v-if="!sId && !$route.query.onlyReadObj" v-model="listQuery.entity.sysShellId" label="所属分校" :list="shellList" @change="handleSysShellId" isShowSearch isCascader name="sysShellId" childrenKey="child" :disabled="shellList.length === 1 && (!shellList[0].hasChildren || shellList[0].child.length === 1)" isRequrie isCell clearable />
+      <van-field v-if="$route.query.onlyReadObj" v-model="$route.query.onlyReadObj.shell" clear-trigger="always" input-align="right" label="所属分校" disabled maxlength="50" placeholder="请输入" />
+
       <RePick v-if="!sId && roleFlag !== 2" v-model="listQuery.entity.belongSysShellId" label="所属部门" :placeholder="!listQuery.entity.sysShellId ? '请先选择所属分校':'请选择'" :disabled="!listQuery.entity.sysShellId || departList.length === 1" :list="departList" isShowSearch idKey="value" titleKey="text" name="belongSysShellId" isRequrie isCell clearable />
       <RePick v-model="listQuery.entity.crmMarketAreaId" label="市场区域" :placeholder="!listQuery.entity.sysShellId ? '请先选择所属分校': !areaList.length ?'请先补充市场区域':'请选择'" :disabled="!listQuery.entity.sysShellId || !areaList.length || areaList.length === 1" :list="areaList" isShowSearch name="crmMarketAreaId" isRequrie isCell clearable @change="handlemarketAreaSelect" />
       <van-field v-model.trim="listQuery.entity.name" clear-trigger="always" name="name" required clearable input-align="right" label="学生姓名" maxlength="50" placeholder="请输入" :rules="[
@@ -22,7 +24,9 @@
         <RePick v-model="listQuery.entity.goSchoolId" label="就读学校" :list.sync="schoolList" ref="goSchoolRef" @change="handleSchool" isShowSearch isOriginSchool :originSchoolAttr="listQuery.entity.attributeId" name="goSchoolId" originSchoolType="1" v-if="listQuery.entity.attributeId != -1" :isRequrie="isRequireSchoolId" isCell clearable />
         <RePick v-model="listQuery.entity.majorId" label="院系/专业" :list.sync="professionList" ref="majorRef" @change="handleSchoolAndMajorMarketArea" isShowSearch isOriginSchool :originSchoolAttr="listQuery.entity.goSchoolId" name="majorId" originSchoolType="2" v-if="listQuery.entity.attributeId != -1" :isRequrie="[1].includes(this.systemId)" isCell clearable />
       </div>
-      <RePick v-model="listQuery.entity.crmSourceChannelId" label="来源渠道" :list="sourceChannelList" isShowSearch isCascader name="crmSourceChannelId" isRequrie isCell clearable isLastSelect />
+      <RePick v-if="!$route.query.onlyReadObj" v-model="listQuery.entity.crmSourceChannelId" label="来源渠道" :list="sourceChannelList" isShowSearch isCascader name="crmSourceChannelId" isRequrie isCell clearable isLastSelect />
+      <van-field v-else v-model="$route.query.onlyReadObj.crmSourceChannelName" clear-trigger="always" input-align="right" label="来源渠道" disabled maxlength="50" placeholder="请输入" />
+
       <div class="student-info-edit-title" @click="handleExpend">
         <span>选填信息</span>
         <div style="vertical-align: middle;">
@@ -121,9 +125,11 @@ import { branchUnitTree, getSchoolMarketAreaApi, getRoleMarketAreaApi, sourceCas
 import { departmentSeaApi } from '@/api/potentialGuest/consultation'
 import { verifyUserApi, detailClientApi } from '@/api/potentialGuest/counselRecord'
 import { commonCascadeApi, infoSetApi } from '@/api/common'
+import { addPartPoUser } from '@/api/potentialGuest/activity'
+
 import VerifyFunc from '@/utils/verify'
 import { commonSchoolInfohandle } from '@/utils'
-import { mapState } from 'vuex'
+import { mapState, mapMutations } from 'vuex'
 import { Dialog } from 'vant'
 import dayjs from 'dayjs'
 export default {
@@ -251,6 +257,7 @@ export default {
     }
   },
   methods: {
+    ...mapMutations('activity', ['SET_PARTACTID', 'SET_PARTUSERUPDATE']),
     handlemarketAreaSelect(val) {
       if (this.marketRoleFlag) this.originalMarketAreaId = val
     },
@@ -409,16 +416,24 @@ export default {
 
     handleInitApi() {
       // 所属分校
-      branchUnitTree().then(res => {
-        this.shellList = res.data || []
-        if (this.shellList.length === 1 && !this.shellList[0].hasChildren) {
-          this.listQuery.entity.sysShellId = this.shellList[0].id
-          this.handleSysShellId(this.shellList[0].id)
-        } else if (this.shellList.length === 1 && this.shellList[0].child.length === 1) {
-          this.listQuery.entity.sysShellId = this.shellList[0].child[0].id
-          this.handleSysShellId(this.shellList[0].child[0].id)
-        }
-      })
+
+      if (!this.$route.query.onlyReadObj) {
+        branchUnitTree().then(res => {
+          this.shellList = res.data || []
+          if (this.shellList.length === 1 && !this.shellList[0].hasChildren) {
+            this.listQuery.entity.sysShellId = this.shellList[0].id
+            this.handleSysShellId(this.shellList[0].id)
+          } else if (this.shellList.length === 1 && this.shellList[0].child.length === 1) {
+            this.listQuery.entity.sysShellId = this.shellList[0].child[0].id
+            this.handleSysShellId(this.shellList[0].child[0].id)
+          }
+        })
+      } else {
+        const { shellId } = this.$route.query.onlyReadObj
+        this.listQuery.entity.sysShellId = shellId
+        this.handleSysShellId(shellId)
+      }
+
 
       // 获取来源级联
       sourceCascadeApi(1).then(res => {
@@ -652,6 +667,11 @@ export default {
             editClientApi(form).then(res => {
               this.$sm(res.data.title)
               this.loading = false
+
+              // 参与人员编辑
+              // if (this.$route.query.flag) {
+              //   this['SET_PARTACTID']({ activityPartId: this.sId })
+              // }
               this.handleBack()
             }).catch(() => {
               this.loading = false
@@ -666,12 +686,25 @@ export default {
                   this.loading = false
                   // 向上更新
                 } else if (this.potentialType === 'potential') {
-                  addClient(form).then(res => {
-                    this.$sm(res.data.title)
-                    resolve(res.data)
-                  }).catch(() => {
-                    this.loading = false
-                  })
+                  // 参与人员添加潜在用户
+                  const { sid } = this.$route.query
+                  if (sid) {
+                    addPartPoUser(form, sid).then(res => {
+                      console.log('添加参与人员中....');
+                      this['SET_PARTUSERUPDATE']({ activityPartIsUpdate: true })
+                      this.$sm(res.data.title)
+                      resolve(res.data)
+                    }).catch(() => {
+                      this.loading = false
+                    })
+                  } else {
+                    addClient(form).then(res => {
+                      this.$sm(res.data.title)
+                      resolve(res.data)
+                    }).catch(() => {
+                      this.loading = false
+                    })
+                  }
                 }
               }
             }).catch(() => {
@@ -703,9 +736,20 @@ export default {
       this.handleStudentSave().then(res => {
         this.loading = false
         setTimeout(() => {
-          this.$router.push({
-            path: `/counselrecord/${res.id}/null`
-          })
+          console.log('sssss', this.$route.query.onlyReadObj);
+          if (this.$route.query.onlyReadObj) {
+            //  回退到参与人员标识
+            this.$router.push({
+              path: `/counselrecord/${res.id}/null`,
+              query: {
+                isComeFrom: 'actPart'
+              }
+            })
+          } else {
+            this.$router.push({
+              path: `/counselrecord/${res.id}/null`,
+            })
+          }
         }, 2000)
       })
     },

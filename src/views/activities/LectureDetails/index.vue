@@ -4,16 +4,16 @@
     <div class="student-records">
       <van-tabs v-model="recordsTab" swipeable title-inactive-color='#999999' title-active-color='#333333' color='#333333' lazy-render>
         <van-tab title="参与人员">
-          <ParticipantRecord ref="participantRecord" :counselTab="counselTab" :sId="sId" :isAutoScroll.sync="isAutoScroll" />
+          <ParticipantRecord ref="participantRecord" :onlyReadObj="onlyReadObj" :counselTab="counselTab" :sId="sId" :isAutoScroll.sync="isAutoScroll" />
         </van-tab>
         <van-tab title="移交情况">
-          <HandoverRecord  :sId="sId" :isAutoScroll.sync="isAutoScroll" />
+          <HandoverRecord :sId="sId" :isAutoScroll.sync="isAutoScroll" />
         </van-tab>
         <van-tab title="问卷信息">
-          <QuestionRecord  :counselTab="counselTab" :sId="sId" :isAutoScroll.sync="isAutoScroll" />
+          <QuestionRecord :counselTab="counselTab" :sId="sId" :isAutoScroll.sync="isAutoScroll" />
         </van-tab>
         <van-tab title="成本管理">
-          <CostRecord  :sId="sId" :counselTab="counselTab" :branchId="studentInfo.branchId" :isAutoScroll.sync="isAutoScroll" />
+          <CostRecord :sId="sId" :counselTab="counselTab" :branchId="studentInfo.branchId" :isAutoScroll.sync="isAutoScroll" />
         </van-tab>
       </van-tabs>
     </div>
@@ -36,7 +36,8 @@ export default {
   },
   computed: {
     ...mapState({
-      activityPartId: state => state.activity.activityPartId
+      activityPartId: state => state.activity.activityPartId,
+      activityPartIsUpdate: state => state.activity.activityPartIsUpdate,
     }),
   },
   data() {
@@ -46,7 +47,8 @@ export default {
       isAutoScroll: false,
       studentInfo: {},
       counselTab: '',
-      isReFresh: false
+      isReFresh: false,
+      onlyReadObj: {}
     }
   },
   created() {
@@ -55,23 +57,31 @@ export default {
     this.handleScrollInit()
   },
   activated() {
-    // this.handleScrollInit()
     if (this.isReFresh) {
       this.handleDetail()
     }
     // 重置问卷预览缓存
     this.$EventBus.$emit('handleResetLive', 'activities-QuesConnect')
 
-    // 参与人员是否跟新
-    if (activityPartId) {
+    // 参与人员列表单独更新
+    if (this.activityPartId) {
       this.$nextTick(() => {
-        this.$refs.participantRecord.reSetSingleList(this.activityPartId)
+        // this.$refs.participantRecord.reSetSingleList(this.activityPartId)
         this['SET_PARTACTID']({ activityPartId: null })
       })
     }
+
+    // 参与人员列表刷新
+    if (this.activityPartIsUpdate) {
+      this.$nextTick(() => {
+        this.$refs.participantRecord.handleRefresh()
+        this['SET_PARTUSERUPDATE']({ activityPartIsUpdate: false })
+      })
+    }
+
   },
   methods: {
-    ...mapMutations('activity', ['SET_PARTACTID']),
+    ...mapMutations('activity', ['SET_PARTACTID', 'SET_PARTUSERUPDATE']),
     handleRefresh() {
       this.isReFresh = true
     },
@@ -92,6 +102,12 @@ export default {
       return new Promise(resolve => {
         this.isReFresh = false
         getLectureInfoApi(this.sId).then(res => {
+          this.onlyReadObj = {
+            shellId: res.data.shellId,
+            shell: res.data.shell,
+            crmSourceChannelName: res.data.crmSourceChannelName,
+            crmSourceChannelId: res.data.crmSourceChannelId,
+          }
           this.$emit('onUpdataInfo', res.data)
           this.studentInfo = res.data || {}
           resolve()

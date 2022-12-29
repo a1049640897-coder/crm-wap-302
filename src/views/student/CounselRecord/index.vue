@@ -528,7 +528,11 @@ export default {
     },
     handleBack(num = -1) {
       // setTimeout(() => {
-      this.$router.go(num)
+      if (this.$route.query.isComeFrom === 'actPart') {
+        this.$router.go(-2)
+      } else {
+        this.$router.go(num)
+      }
       // }, 2000);
     }
   }

@@ -186,7 +186,7 @@ export default {
         this.resultObj = res.data || {}
         this.imgurl = `data:image/png;base64,${this.resultObj.checkCode}`
         this.loading = false
-        if (!this.canvasShow) this.initCanvas()
+        // if (!this.canvasShow) this.initCanvas()
       }).catch(() => {
         this.loading = false
       })
