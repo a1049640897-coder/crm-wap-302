@@ -1,6 +1,6 @@
 <template>
   <div>
-    <HandoverFilter :listType="listType" :paramProp="listConditonObj" :filterProp="listFilterObj" @onListQuery="handleListQuery" v-if="firstList.length" />
+    <HandoverFilter :listType="listType" :moreActLecture="moreActLecture" :paramProp="listConditonObj" :filterProp="listFilterObj" @onListQuery="handleListQuery" v-if="firstList.length" />
     <div class="count-cont" v-if="firstList.length">
       <div class="count-list">
         <van-loading v-if="cloading" size="0.6rem" style="margin-bottom:0.4rem" />
@@ -76,7 +76,8 @@ export default {
         },
         pageinfo: { pageNum: 1, pageSize: 20, sort: [{ type: 1, column: 'addTime' }] }
       },
-      firstList: []
+      firstList: [],
+      moreActLecture: {}
     }
   },
   created() {
@@ -127,6 +128,7 @@ export default {
           activityId: this.sId
         }
       }
+      this.moreActLecture = query.handoverParameterVO
 
       let data = []
 

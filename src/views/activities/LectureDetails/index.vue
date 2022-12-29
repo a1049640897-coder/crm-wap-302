@@ -54,7 +54,7 @@ export default {
   created() {
     this.sId = Number(this.$route.params.sid)
     this.handleDetail()
-    this.handleScrollInit()
+    // this.handleScrollInit()
   },
   activated() {
     if (this.isReFresh) {

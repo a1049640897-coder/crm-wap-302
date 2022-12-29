@@ -1,6 +1,6 @@
 <template>
   <div>
-    <HeaderFilter :listType="listType" @onListQuery="handleListQuery" ref="headerFilter" :paramProp="listQuery.lecture" />
+    <HeaderFilter :listType="listType" @onListQuery="handleListQuery" ref="headerFilter" :paramProp="listQuery.lecture" :moreActLecture="moreActLecture" />
     <LectureCount :listType="listType" :countLoading.sync="countLoading" :countData="countData" v-if="listType!=='4'" />
     <RMList :moreLoading.sync="moreLoading" :refreshing.sync="refreshing" :finished.sync="finished" @onLoad="handleLoad" @onRefresh="handleRefresh" isMore :tableList="tableList">
       <div>
@@ -76,7 +76,8 @@ export default {
         }
       },
       isClearCache: false,
-      shareCodeIsOpen: false
+      shareCodeIsOpen: false,
+      moreActLecture: {}
     }
   },
   computed: {
@@ -200,6 +201,7 @@ export default {
           chargePersonIds: chargePersonIds ? [chargePersonIds] : [],
         }
       }
+      this.moreActLecture = query.lecture
       let nowQuery = {
         type: query.lecture.distributeType,
         branchId: query.lecture.nowActivityshellId

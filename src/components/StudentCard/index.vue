@@ -3,7 +3,7 @@
     <div class="student-base">
       <div class="student-header common-list-contain" @click="handleStudentInfo">
         <div class="SH-l">
-          <div class="SH-name">{{studentData.name}}</div>
+          <div class="SH-name" style="width:auto">{{studentData.name}}</div>
           <!-- 标签1 -->
           <div class="SH-tags">
             <div class="SH-tag" :class="studentData.targetOne.isNew == 1 ? 'SH-tag-green':'SH-tag-yellow'" v-if="listType == 9 && studentData.targetOne && studentData.targetOne.isNew != null">{{studentData.targetOne.isNew == 1 ? '新用户' : '老用户'}}</div>
@@ -705,6 +705,7 @@ export default {
 
     handleUpdataInfo() {
       if (this.listType === '9') {
+        this.jumoStudentId = null
         this.$emit('onUpdataInfo', this.studentData.id)
       } else {
         const api = this.listType === 'yuYueZiXun' ? appointmentConsultationInfoApi : consultationInfoApi

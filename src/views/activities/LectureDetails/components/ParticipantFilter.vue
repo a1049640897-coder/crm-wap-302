@@ -138,6 +138,7 @@ export default {
     listType: String,
     paramProp: Object,
     listQueryParam: Object,
+    moreActLecture: Object, // 更多选择颜色变化
   },
   components: {
     ReQuickDateBtns: () => import('@/components/ReComponents/ReQuickDateBtns'),
@@ -230,11 +231,20 @@ export default {
     }),
     isMoreAct() {
       let bol = false
-      const listQuery = this.listQuery || {}
-      const { schoolIdLocal, crmMarketAreaIds, graduationYearLocal, examYearLocal, isFresh, intentionClass, campusLocal, ownLocal  } = listQuery
+      const listQuery = this.moreActLecture || {}
+      const { attendSchools, crmMarketAreaIds, years, examYears, isFresh, intentionClass, schoolManager, owner } = listQuery
+      // const { schoolIdLocal, crmMarketAreaIds, graduationYearLocal, examYearLocal,
+      //  isFresh, intentionClass, campusLocal, ownLocal } = listQuery
+      // if (
+      //   schoolIdLocal || crmMarketAreaIds && crmMarketAreaIds.length || graduationYearLocal || examYearLocal ||
+      //   isFresh || intentionClass && intentionClass.length || campusLocal || ownLocal
+      // ) {
+      //   bol = true
+      // }
       if (
-        schoolIdLocal || crmMarketAreaIds && crmMarketAreaIds.length || graduationYearLocal || examYearLocal ||
-        isFresh || intentionClass && intentionClass.length || campusLocal || ownLocal 
+        attendSchools && attendSchools.length || crmMarketAreaIds && crmMarketAreaIds.length || years && years.length ||
+        examYears && examYears.length || isFresh || intentionClass && intentionClass.length || schoolManager && schoolManager.length ||
+        owner && owner.length
       ) {
         bol = true
       }

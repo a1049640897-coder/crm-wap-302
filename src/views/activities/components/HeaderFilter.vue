@@ -180,7 +180,8 @@ import { dayTextFormatter } from '@/utils'
 export default {
   props: {
     listType: String,
-    paramProp: Object
+    paramProp: Object,
+    moreActLecture: Object
   },
   components: {
     ReQuickDateBtns: () => import('@/components/ReComponents/ReQuickDateBtns'),
@@ -239,9 +240,15 @@ export default {
     }),
     isMoreAct() {
       let bol = false
-      const listQuery = this.listQuery || {}
-      const { shellIdsLocal, collegeInfoIdLocal, teacherIds, chargePersonIds, usePersonId, opponent } = listQuery
-      if (shellIdsLocal || collegeInfoIdLocal || teacherIds || chargePersonIds || usePersonId || opponent) {
+      const listQuery = this.moreActLecture || {}
+      // const { shellIdsLocal, collegeInfoIdLocal, teacherIds, chargePersonIds, usePersonId, opponent } = listQuery
+      // if (shellIdsLocal || collegeInfoIdLocal || teacherIds || chargePersonIds || usePersonId || opponent) {
+      //   bol = true
+      // }
+      const { chargePersonIds, collegeInfoId, shellIds, teacherIds, usePersonId, opponent } = listQuery
+      console.log('paramProp', this.paramProp);
+      if (shellIds && shellIds.length || collegeInfoId && collegeInfoId.length || teacherIds && teacherIds.length ||
+        chargePersonIds && chargePersonIds.length || usePersonId || opponent) {
         bol = true
       }
       return bol
@@ -437,7 +444,7 @@ export default {
         this.$refs.vanDropItem3.toggle(false)
         this.$refs.vanDropItem4.toggle(false)
       }
-      console.log('this.listQuery',this.listQuery);
+      console.log('this.listQuery', this.listQuery);
       this.$emit('onListQuery', this.listQuery)
     },
 

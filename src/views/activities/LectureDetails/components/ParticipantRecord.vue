@@ -1,6 +1,6 @@
 <template>
   <div>
-    <ParticipantFilter :listType="listType" :paramProp="listConditonObj" :listQueryParam="listQuery.param" @onListQuery="handleListQuery" v-if="firstList.length" />
+    <ParticipantFilter :listType="listType" :moreActLecture="moreActLecture" :paramProp="listConditonObj" :listQueryParam="listQuery.param" @onListQuery="handleListQuery" v-if="firstList.length" />
     <div class="count-cont" v-if="firstList.length">
       <div class="count-list">
         <van-loading v-if="cloading" size="0.6rem" style="margin-bottom:0.4rem" />
@@ -35,6 +35,7 @@
 <script>
 import { postPartStudentListApi, postPartStudentCountApi, postPartStudentConditonApi } from '@/api/potentialGuest/activity'
 import { mapState } from 'vuex'
+import { getScrollTop } from '@/utils'
 // 参与人员
 export default {
   props: {
@@ -78,7 +79,9 @@ export default {
       sId: null,
       countObj: { 1: 0, 6: 0, 7: 0 },
       listType: '1',
-      firstList: []
+      firstList: [],
+      height: 0,
+      moreActLecture: {}
     }
   },
 
@@ -89,10 +92,31 @@ export default {
     this.listType = (listType == 2 ? 3 : 1).toString()
     this.listQuery.param.type = this.listType
     this.handleInit('firstRequest')
+    this.handleScrollInit()
+  },
+
+  activated() {
+    console.log(5555555556, this.height);
+    this.handleScrollInit()
   },
 
 
   methods: {
+    handleScrollToTop() {
+      window.scrollTo(0, 0)
+      this.height = 0
+    },
+
+    handleScrollInit() {
+      window.addEventListener('scroll', this.handleScroll)
+      window.scrollTo(0, this.height)
+    },
+    handleScroll() {
+      getScrollTop().then(height => {
+        this.height = height + 500
+      })
+    },
+
     reSetSingleList(id) {
       let listQuery = JSON.parse(JSON.stringify(this.listQuery))
       listQuery.param.id = id
@@ -218,6 +242,7 @@ export default {
           activityId: [this.sId],
         }
       }
+      this.moreActLecture = query.param
       postPartStudentListApi(query).then(res => {
         if (['init', 'refresh'].includes(val)) {
           this.getListCount()
@@ -249,6 +274,7 @@ export default {
       this.listQuery.pageinfo.pageNum = 1
       this.finished = false
       this.getTableList('refresh')
+      this.handleScrollToTop()
     },
     getListCount() {
       this.cloading = true

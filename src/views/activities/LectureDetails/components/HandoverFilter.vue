@@ -105,7 +105,8 @@ export default {
   props: {
     listType: String,
     paramProp: Object,
-    filterProp: Object // 移交筛选title的参数
+    filterProp: Object, // 移交筛选title的参数
+    moreActLecture: Object,
   },
   components: {
     ReQuickDateBtns: () => import('@/components/ReComponents/ReQuickDateBtns'),
@@ -250,9 +251,10 @@ export default {
     }),
     isMoreAct() {
       let bol = false
-      const listQuery = this.listQuery || {}
+      const listQuery = this.moreActLecture || {}
+      console.log('moreActLecture', listQuery);
       const { handoverShellId, handoverUserId, handoverType, targetSysId, targetShellId, targetUserId } = listQuery
-      if (handoverShellId || handoverUserId && handoverUserId.length || handoverType || targetSysId || targetShellId && targetShellId.length || targetUserId && targetUserId.length) {
+      if (handoverShellId && handoverShellId.length || handoverUserId && handoverUserId.length || handoverType || targetSysId || targetShellId && targetShellId.length || targetUserId && targetUserId.length) {
         bol = true
       }
       return bol
@@ -378,7 +380,7 @@ export default {
     handleInit() {
       this.defaultDate = null
       this.listQuery = {
-        ...this.listQuery,
+        ...this.paramProp,
         titleType: this.listQuery.titleType ? this.listQuery.titleType : null,
       }
       if ((this.listQuery.beginDate && this.listQuery.endDate) || (this.listQuery.signUpBegin && this.listQuery.signUpEnd)) {
@@ -413,7 +415,7 @@ export default {
     },
 
     handleDateSelect(val) {
-     if (val.filter(item => item).length === 2) {
+      if (val.filter(item => item).length === 2) {
         // dateType 1: 移交日期 2 报名日期
         if (this.listQuery.dateType == 1) {
           this.listQuery.beginDate = dayjs(val[0]).format('YYYY/MM/DD')

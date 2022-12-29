@@ -2,14 +2,15 @@
   <van-overlay class="share-box" :show="isOpen" @click.stop="handleStopClose" z-index="99999">
     <van-icon class="close-btn" name="close" @click.stop="handleClose" />
     <div class="container" v-if="isOpen">
+     
       <div v-show="imageCanvas" v-if="canvasShow" class="canvas_img" id="imgCanvas"></div>
-      <div v-if="!imageCanvas" ref="saveToImage" class="box">
+      <div v-if="!imageCanvas" ref="saveToImage" :class="resultObj.address && resultObj.address.length >30 ? 'box h-lg': 'box'">
         <div class="header">
           <div class="hd-lf">
             <img src="~@/assets/images/avatar_02.png" alt="">
           </div>
           <div class="hd-rt">
-            让您学有所成, 让教育成就梦想
+            让您学有所成, 让教育成就梦想  
           </div>
         </div>
         <div class="content">
@@ -186,7 +187,7 @@ export default {
         this.resultObj = res.data || {}
         this.imgurl = `data:image/png;base64,${this.resultObj.checkCode}`
         this.loading = false
-        // if (!this.canvasShow) this.initCanvas()
+        if (!this.canvasShow) this.initCanvas()
       }).catch(() => {
         this.loading = false
       })
@@ -404,6 +405,9 @@ export default {
           background-color: #3a44f0;
         }
       }
+    }
+    .h-lg {
+      height: 75vh;
     }
   }
   .share_btn {
