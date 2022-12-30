@@ -246,7 +246,6 @@ export default {
       //   bol = true
       // }
       const { chargePersonIds, collegeInfoId, shellIds, teacherIds, usePersonId, opponent } = listQuery
-      console.log('paramProp', this.paramProp);
       if (shellIds && shellIds.length || collegeInfoId && collegeInfoId.length || teacherIds && teacherIds.length ||
         chargePersonIds && chargePersonIds.length || usePersonId || opponent) {
         bol = true

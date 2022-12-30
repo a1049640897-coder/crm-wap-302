@@ -128,6 +128,7 @@ export default {
   },
   activated() {
     this.operatShow = false
+    this.showPopover = false
   },
   mounted() {
     this.$emit('onStudentCardMounted')
@@ -139,6 +140,9 @@ export default {
     }),
   },
   methods: {
+    handleCloseSelect() {
+      console.log('关闭了...');
+    },
     filterCounselTab() {
       if (this.studentData.activityType) {
         return this.studentData.activityType == 1 ? 'LectureReg' : 'MarketAct'

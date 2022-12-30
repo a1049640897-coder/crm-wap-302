@@ -30,7 +30,7 @@
 
         <!-- 2 联系方式 -->
         <div class="student-info-item" v-if="studentData.mobileNumber || studentData.wxNumber || studentData.qqNumber">
-          <div class="info-item">
+          <div class="info-item" v-if="studentData.mobileNumber">
             <img src="@/assets/images/icons/mobile.png" alt="" class="info-img">
             <a @click.stop="handlePhone" :href="`tel: ${studentData.mobileNumber}`">{{studentData.mobileNumber || '-' }}</a>
           </div>

@@ -539,6 +539,8 @@ export default {
     if (this.jumoStudentId) {
       this.handleUpdataInfo()
     }
+    this.operatShow = false
+    this.showPopover = false
   },
   mounted() {
     this.$emit('onStudentCardMounted')

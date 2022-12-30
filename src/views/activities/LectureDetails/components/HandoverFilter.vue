@@ -252,7 +252,6 @@ export default {
     isMoreAct() {
       let bol = false
       const listQuery = this.moreActLecture || {}
-      console.log('moreActLecture', listQuery);
       const { handoverShellId, handoverUserId, handoverType, targetSysId, targetShellId, targetUserId } = listQuery
       if (handoverShellId && handoverShellId.length || handoverUserId && handoverUserId.length || handoverType || targetSysId || targetShellId && targetShellId.length || targetUserId && targetUserId.length) {
         bol = true
@@ -274,11 +273,6 @@ export default {
       if (this.listQuery.result && this.listQuery.result.length) isShow = true
       return isShow
     },
-    isHtab4() {
-      let isShow = false
-      if (this.listQuery.intentionType && this.listQuery.intentionType.length) isShow = true
-      return isShow
-    }
   },
   created() {
     // this.useGetGenerousList()
@@ -380,7 +374,7 @@ export default {
     handleInit() {
       this.defaultDate = null
       this.listQuery = {
-        ...this.paramProp,
+        ...this.listQuery,
         titleType: this.listQuery.titleType ? this.listQuery.titleType : null,
       }
       if ((this.listQuery.beginDate && this.listQuery.endDate) || (this.listQuery.signUpBegin && this.listQuery.signUpEnd)) {
@@ -429,7 +423,9 @@ export default {
     // 日历重置
     handleDateReset() {
       this.defaultDate = null
-      this.$refs.vanCalendar && this.$refs.vanCalendar.reset()
+      this.$nextTick(() => {
+        this.$refs.vanCalendar && this.$refs.vanCalendar.reset()
+      })
     },
     handleReset(num) {
       if (num === 1) {
@@ -439,9 +435,12 @@ export default {
       } else if (num === 3) {
         this.listQuery.result = []
       } else if (num === 4) {
-        this.listQuery.intentionType = []
-        this.listQuery.startDate = null
+        this.listQuery.signUpBegin = null
+        this.listQuery.signUpEnd = null
+        this.listQuery.dateType = 1
+        this.listQuery.beginDate = null
         this.listQuery.endDate = null
+        this.handleDateReset()
       }
       // const obj = JSON.parse(JSON.stringify(this.paramProp))
     },

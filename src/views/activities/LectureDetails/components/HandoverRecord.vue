@@ -1,6 +1,6 @@
 <template>
   <div>
-    <HandoverFilter :listType="listType" :moreActLecture="moreActLecture" :paramProp="listConditonObj" :filterProp="listFilterObj" @onListQuery="handleListQuery" v-if="firstList.length" />
+    <HandoverFilter :listType="listType" :moreActLecture="moreActLecture" :paramProp="listQuery.handoverParameterVO" :filterProp="listFilterObj" @onListQuery="handleListQuery" v-if="firstList.length" />
     <div class="count-cont" v-if="firstList.length">
       <div class="count-list">
         <van-loading v-if="cloading" size="0.6rem" style="margin-bottom:0.4rem" />
@@ -58,7 +58,7 @@ export default {
           activityId: 236,
           beginDate: null,
           endDate: null,
-          day: 30,
+          day: 6,
           handoverKeyword: null,
           handoverShellId: [],
           handoverState: null,
