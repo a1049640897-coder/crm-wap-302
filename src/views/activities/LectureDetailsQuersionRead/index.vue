@@ -35,13 +35,15 @@ export default {
     }
   },
   created() {
-    const { id } = this.$route.params
+    const { id, activityId } = this.$route.params
     this.questionId = id
+    console.log('this.$route.params.activitiId', activityId);
     if (process.env.NODE_ENV === 'development') {
-      this.newUrl = 'http://59.61.85.58:13567/outPage/#/mobileQuestions?questionId=' + this.questionId + '&isPreview=1&activityId=null'
+      this.newUrl = 'http://59.61.85.58:13567/outPage/#/mobileQuestions?questionId=' + this.questionId + `&isPreview=1&activityId=${activityId}`
     } else {
+      // this.newUrl = 'http://59.61.85.58:8029/outPage/#/mobileQuestions?questionId=' + this.questionId + `&isPreview=1&activityId=${activityId}`
       const originObj = this.domainNameList.find(e => e.gateway.includes(this.origin))
-      this.newUrl = originObj.outGateway + this.questionId + '&isPreview=1&activityId=null'
+      this.newUrl = originObj.outGateway + this.questionId + `&isPreview=1&activityId=${activityId}`
     }
   },
   destroyed() {

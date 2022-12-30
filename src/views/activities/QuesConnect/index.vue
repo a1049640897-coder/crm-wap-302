@@ -174,7 +174,7 @@ export default {
       this.loading = true
       this.$refs.quesConnect.validate().then(() => {
         this.loading = false
-        this.$router.push(`/QuersionRead/${this.quesId ? this.quesId : this.listQuery.questionnaire}`)
+        this.$router.push(`/QuersionRead/${this.quesId ? this.quesId : this.listQuery.questionnaire}/${this.$route.params.activitiId}`)
       }).catch(() => {
         this.loading = false
       })

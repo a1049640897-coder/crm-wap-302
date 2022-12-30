@@ -24,6 +24,6 @@ export default {
         next()
       },
     },
-    { path: '/QuersionRead/:id', name: `${pre}QuersionRead`, component: () => import('@/views/activities/LectureDetailsQuersionRead'), meta: { meta, cache: false, title: '问卷预览' } }
+    { path: '/QuersionRead/:id/:activityId', name: `${pre}QuersionRead`, component: () => import('@/views/activities/LectureDetailsQuersionRead'), meta: { meta, cache: false, title: '问卷预览' } }
   ])('activities-')
 }
